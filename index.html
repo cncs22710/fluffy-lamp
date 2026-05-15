@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deliberately Insecure Password Generator</title>
+    <style>
+        :root {
+            --bg-color: #fff5f5;
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+            --border-color: #feb2b2;
+            --accent-color: #e53e3e;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.1);
+            border: 2px solid var(--border-color);
+            max-width: 450px;
+            width: 100%;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--accent-color);
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .warning-banner {
+            background-color: #fff5f5;
+            border-left: 4px solid var(--accent-color);
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: #9b2c2c;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: #fff;
+        }
+
+        .output-box {
+            background: #f7fafc;
+            border: 1px dashed #cbd5e0;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin: 20px 0;
+            word-break: break-all;
+            color: #4a5568;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #c53030;
+        }
+
+        .flaw-explanation {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>⚠️ Insecure Password Generator</h2>
+    
+    <div class="warning-banner">
+        <strong>WARNING:</strong> These passwords are intentionally weak. Do not use them for real online accounts.
+    </div>
+
+    <div class="form-group">
+        <label for="flaw-type">Select Insecurity Profile:</label>
+        <select id="flaw-type" onchange="updateExplanation()">
+            <option value="common">Common Dictionary Words (e.g., Password2026!)</option>
+            <option value="sequence">Keyboard Sequences (e.g., qwerty12345)</option>
+            <option value="short">Too Short / Lowercase Only (6 characters)</option>
+        </select>
+    </div>
+
+    <div class="output-box" id="password-display">Click Generate</div>
+
+    <button onclick="generateInsecurePassword()">Generate Weak Password</button>
+
+    <div class="flaw-explanation" id="explanation-text">
+        Select a profile to see why the resulting password is fundamentally vulnerable to cyber attacks.
+    </div>
+</div>
+
+<script>
+    const config = {
+        words: ["Password", "Admin", "Welcome", "Secret", "Monkey", "Football", "LetMeIn", "Guest"],
+        years: ["2024", "2025", "2026", "2027"],
+        sequences: ["123", "12345", "789", "111", "000"],
+        keyboards: ["qwerty", "asdfgh", "zxcvbn"],
+        symbols: ["!", "?", "$"],
+        chars: "abcdefghijklmnopqrstuvwxyz"
+    };
+
+    const explanations = {
+        common: "<strong>Why it is weak:</strong> Uses predictable dictionary terms combined with predictable years. Hackers use pre-compiled dictionary lists to crack these in milliseconds.",
+        sequence: "<strong>Why it is weak:</strong> Relies on sequential keyboard lines or linear number runs. Automated brute-force software tests these common physical movement patterns first.",
+        short: "<strong>Why it is weak:</strong> Short length (6 characters) and restricted character variety drastically lower the total permutations. A modern graphics card can guess every combination instantly."
+    };
+
+    function updateExplanation() {
+        const type = document.getElementById("flaw-type").value;
+        document.getElementById("explanation-text").innerHTML = explanations[type];
+    }
+
+    function getRandomElement(arr) {
+        // Deliberately uses Math.random() which is mathematically predictable, not cryptographically secure
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateInsecurePassword() {
+        const type = document.getElementById("flaw-type").value;
+        let password = "";
+
+        if (type === "common") {
+            password = getRandomElement(config.words) + getRandomElement(config.years) + getRandomElement(config.symbols);
+        } else if (type === "sequence") {
+            password = getRandomElement(config.keyboards) + getRandomElement(config.sequences);
+        } else if (type === "short") {
+            for (let i = 0; i < 6; i++) {
+                password += getRandomElement(config.chars.split(""));
+            }
+        }
+
+        document.getElementById("password-display").innerText = password;
+    }
+
+    // Initialize display fields on first load
+    updateExplanation();
+</script>
+
+</body>
+</html>
