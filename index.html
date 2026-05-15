@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deliberately Insecure Password Generator</title>
+    <title>Insecure Password Generator & Cookie Clicker</title>
     <style>
         :root {
-            --bg-color: #fff5f5;
+            --bg-color: #f4f7f6;
             --card-bg: #ffffff;
             --text-color: #2d3748;
-            --border-color: #feb2b2;
+            --border-color: #cbd5e0;
             --accent-color: #e53e3e;
+            --cookie-color: #d69e2e;
         }
 
         body {
@@ -18,36 +19,68 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
+            box-sizing: border-box;
         }
 
-        .container {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.1);
-            border: 2px solid var(--border-color);
-            max-width: 450px;
+        .game-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 900px;
             width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .game-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .password-card {
+            border-color: #feb2b2;
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.05);
+        }
+
+        .cookie-card {
+            border-color: #fbd38d;
+            box-shadow: 0 4px 15px rgba(214, 158, 46, 0.05);
+            text-align: center;
         }
 
         h2 {
             margin-top: 0;
-            color: var(--accent-color);
-            text-align: center;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
+
+        .password-card h2 { color: var(--accent-color); }
+        .cookie-card h2 { color: var(--cookie-color); }
 
         .warning-banner {
             background-color: #fff5f5;
             border-left: 4px solid var(--accent-color);
             padding: 10px;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
             color: #9b2c2c;
         }
 
@@ -59,35 +92,34 @@
             display: block;
             margin-bottom: 6px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        select {
+        select, input {
             width: 100%;
             padding: 10px;
             border: 1px solid #cbd5e0;
             border-radius: 6px;
             font-size: 1rem;
             background-color: #fff;
+            box-sizing: border-box;
         }
 
         .output-box {
             background: #f7fafc;
             border: 1px dashed #cbd5e0;
-            padding: 15px;
+            padding: 12px;
             border-radius: 6px;
             text-align: center;
-            font-family: "Courier New", Courier, monospace;
-            font-size: 1.25rem;
+            font-family: monospace;
+            font-size: 1.2rem;
             font-weight: bold;
-            margin: 20px 0;
+            margin: 15px 0;
             word-break: break-all;
-            color: #4a5568;
         }
 
         button {
             width: 100%;
-            background-color: var(--accent-color);
             color: white;
             border: none;
             padding: 12px;
@@ -95,72 +127,176 @@
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: transform 0.1s, background 0.2s;
         }
 
-        button:hover {
-            background-color: #c53030;
+        .btn-danger { background-color: var(--accent-color); }
+        .btn-danger:hover { background-color: #c53030; }
+        
+        .btn-cookie { background-color: var(--cookie-color); }
+        .btn-cookie:hover { background-color: #b7791f; }
+
+        /* Cookie Clicker Specific Elements */
+        .cookie-visual {
+            font-size: 6rem;
+            cursor: pointer;
+            user-select: none;
+            margin: 15px auto;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.05s;
+        }
+
+        .cookie-visual:active {
+            transform: scale(0.92);
+        }
+
+        .stats-display {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .upgrade-shop {
+            margin-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            text-align: left;
+        }
+
+        .shop-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f7fafc;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+
+        .shop-item button {
+            width: auto;
+            padding: 5px 10px;
+            font-size: 0.8rem;
         }
 
         .flaw-explanation {
-            margin-top: 20px;
-            font-size: 0.85rem;
+            margin-top: auto;
+            font-size: 0.8rem;
             color: #718096;
             border-top: 1px solid #e2e8f0;
-            padding-top: 15px;
+            padding-top: 12px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>⚠️ Insecure Password Generator</h2>
-    
-    <div class="warning-banner">
-        <strong>WARNING:</strong> These passwords are intentionally weak. Do not use them for real online accounts.
+<div class="game-layout">
+
+    <!-- SIDE A: DELIBERATELY INSECURE PASSWORD GENERATOR -->
+    <div class="card password-card">
+        <h2>⚠️ Weak Password Engine</h2>
+        
+        <div class="warning-banner">
+            <strong>WARNING:</strong> These credentials present critical security vulnerabilities. Demonstration use only.
+        </div>
+
+        <div class="form-group">
+            <label for="flaw-type">Vulnerability Flaw Type:</label>
+            <select id="flaw-type" onchange="updateExplanation()">
+                <option value="common">Dictionary Phrasing (e.g., Welcome2026!)</option>
+                <option value="sequence">Spatial Patterns (e.g., asdfgh111)</option>
+                <option value="short">Critical Length Deficit (6 Chars)</option>
+                <option value="cookie" id="cookie-option" disabled>🔒 Cookie Mutation (Requires 100 Cookies)</option>
+            </select>
+        </div>
+
+        <div class="output-box" id="password-display">Awaiting Initialization...</div>
+
+        <button class="btn-danger" onclick="generateInsecurePassword()">Generate Weak Password</button>
+
+        <div class="flaw-explanation" id="explanation-text">
+            Select a profile to assess baseline structural vulnerabilities.
+        </div>
     </div>
 
-    <div class="form-group">
-        <label for="flaw-type">Select Insecurity Profile:</label>
-        <select id="flaw-type" onchange="updateExplanation()">
-            <option value="common">Common Dictionary Words (e.g., Password2026!)</option>
-            <option value="sequence">Keyboard Sequences (e.g., qwerty12345)</option>
-            <option value="short">Too Short / Lowercase Only (6 characters)</option>
-        </select>
+    <!-- SIDE B: COMPLETELY OFF-TOPIC COOKIE CLICKER -->
+    <div class="card cookie-card">
+        <h2>🍪 Cookie Clicker Minigame</h2>
+        
+        <div class="stats-display">
+            Cookies: <span id="cookie-count">0</span>
+        </div>
+        <div style="font-size: 0.85rem; color: #718096; margin-bottom: 10px;">
+            Cookies Per Second (CPS): <span id="cps-count">0</span>
+        </div>
+
+        <!-- The Clickable Cookie -->
+        <div class="cookie-visual" onclick="clickCookie()">🍪</div>
+
+        <!-- Upgrade Systems -->
+        <div class="upgrade-shop">
+            <label>Hardware Component Shop:</label>
+            
+            <div class="shop-item">
+                <div>
+                    <strong>Auto-Clicker Bot</strong><br>
+                    Cost: <span id="cost-bot">15</span> cookies (+1 CPS)
+                </div>
+                <button class="btn-cookie" id="btn-buy-bot" onclick="buyUpgrade('bot', 15, 1)">Buy</button>
+            </div>
+
+            <div class="shop-item">
+                <div>
+                    <strong>Grandma's Server Farm</strong><br>
+                    Cost: <span id="cost-farm">100</span> cookies (+8 CPS)
+                </div>
+                <button class="btn-cookie" id="btn-buy-farm" onclick="buyUpgrade('farm', 100, 8)">Buy</button>
+            </div>
+        </div>
     </div>
 
-    <div class="output-box" id="password-display">Click Generate</div>
-
-    <button onclick="generateInsecurePassword()">Generate Weak Password</button>
-
-    <div class="flaw-explanation" id="explanation-text">
-        Select a profile to see why the resulting password is fundamentally vulnerable to cyber attacks.
-    </div>
 </div>
 
 <script>
+    // System Data Configurations
     const config = {
         words: ["Password", "Admin", "Welcome", "Secret", "Monkey", "Football", "LetMeIn", "Guest"],
         years: ["2024", "2025", "2026", "2027"],
-        sequences: ["123", "12345", "789", "111", "000"],
+        sequences: ["123", "12345", "789", "111"],
         keyboards: ["qwerty", "asdfgh", "zxcvbn"],
         symbols: ["!", "?", "$"],
         chars: "abcdefghijklmnopqrstuvwxyz"
     };
 
     const explanations = {
-        common: "<strong>Why it is weak:</strong> Uses predictable dictionary terms combined with predictable years. Hackers use pre-compiled dictionary lists to crack these in milliseconds.",
-        sequence: "<strong>Why it is weak:</strong> Relies on sequential keyboard lines or linear number runs. Automated brute-force software tests these common physical movement patterns first.",
-        short: "<strong>Why it is weak:</strong> Short length (6 characters) and restricted character variety drastically lower the total permutations. A modern graphics card can guess every combination instantly."
+        common: "<strong>Vulnerability Analysis:</strong> Uses structural linguistic phrases found in multi-million entry hacker dictionaries. Instant exploit exposure risk.",
+        sequence: "<strong>Vulnerability Analysis:</strong> Leverages straight lines across physical keyboard tracks. Brute force systems screen for keyboard runs automatically.",
+        short: "<strong>Vulnerability Analysis:</strong> Restricted mathematical mutations. Total string permutation is too low to survive parallel GPU computation array sweeps.",
+        cookie: "<strong>Vulnerability Analysis:</strong> An absurdly long cookie password. It is covered in structural crumbs and invites rogue chocolate chip dependencies."
     };
 
+    // Game Engine State Metrics
+    let gameState = {
+        cookies: 0,
+        cps: 0,
+        upgrades: {
+            bot: { count: 0, cost: 15 },
+            farm: { count: 0, cost: 100 }
+        }
+    };
+
+    // --- Core Password Logic ---
     function updateExplanation() {
         const type = document.getElementById("flaw-type").value;
         document.getElementById("explanation-text").innerHTML = explanations[type];
     }
 
     function getRandomElement(arr) {
-        // Deliberately uses Math.random() which is mathematically predictable, not cryptographically secure
         return arr[Math.floor(Math.random() * arr.length)];
     }
 
@@ -176,13 +312,63 @@
             for (let i = 0; i < 6; i++) {
                 password += getRandomElement(config.chars.split(""));
             }
+        } else if (type === "cookie") {
+            password = "cookie" + "🍪".repeat(Math.min(gameState.cookies, 20)) + "123";
         }
 
         document.getElementById("password-display").innerText = password;
     }
 
-    // Initialize display fields on first load
+    // --- Off-Topic Clicker Logic ---
+    function clickCookie() {
+        gameState.cookies += 1;
+        updateUI();
+    }
+
+    function buyUpgrade(type, baseCost, cpsValue) {
+        let upgrade = gameState.upgrades[type];
+        if (gameState.cookies >= upgrade.cost) {
+            gameState.cookies -= upgrade.cost;
+            gameState.cps += cpsValue;
+            upgrade.count += 1;
+            // Scale costs dynamically by 15%
+            upgrade.cost = Math.ceil(upgrade.cost * 1.15); 
+            
+            updateUI();
+        }
+    }
+
+    function updateUI() {
+        // Refresh Numeric Strings
+        document.getElementById("cookie-count").innerText = Math.floor(gameState.cookies);
+        document.getElementById("cps-count").innerText = gameState.cps;
+        
+        document.getElementById("cost-bot").innerText = gameState.upgrades.bot.cost;
+        document.getElementById("cost-farm").innerText = gameState.upgrades.farm.cost;
+
+        // Button States Check
+        document.getElementById("btn-buy-bot").disabled = (gameState.cookies < gameState.upgrades.bot.cost);
+        document.getElementById("btn-buy-farm").disabled = (gameState.cookies < gameState.upgrades.farm.cost);
+
+        // Unlock Cross-Over feature inside the Generator Select element
+        const cookieOption = document.getElementById("cookie-option");
+        if (gameState.cookies >= 100 && cookieOption.disabled) {
+            cookieOption.disabled = false;
+            cookieOption.innerText = "Chocolaty Cookie Mutation (Exploit!)";
+        }
+    }
+
+    // Standard Game Loop Execution (Tick once per second)
+    setInterval(() => {
+        if (gameState.cps > 0) {
+            gameState.cookies += (gameState.cps / 10); // Update fractional loop ticks
+            updateUI();
+        }
+    }, 100);
+
+    // Initial setup running
     updateExplanation();
+    updateUI();
 </script>
 
 </body>
