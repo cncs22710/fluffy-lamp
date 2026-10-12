@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Neon Slime Arcade & Casino</title>
+  <title>Neon Slime Arcade & Multiplayer Casino</title>
   <style>
     :root {
       --bg: #0b0c10;
@@ -32,7 +32,7 @@
 
     .casino-card {
       width: 100%;
-      max-width: 520px;
+      max-width: 540px;
       background: var(--panel);
       border: 2px solid #252a3b;
       border-radius: 18px;
@@ -49,7 +49,7 @@
 
     .header h1 {
       margin: 0;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       color: var(--accent);
       text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
     }
@@ -66,23 +66,24 @@
 
     .tabs {
       display: flex;
+      flex-wrap: wrap;
       gap: 6px;
       background: #090a0f;
-      padding: 4px;
+      padding: 6px;
       border-radius: 12px;
       margin-bottom: 20px;
     }
 
     .tab-btn {
-      flex: 1;
+      flex: 1 1 30%;
       background: transparent;
       border: none;
       color: var(--subtext);
-      padding: 8px 0;
+      padding: 8px 4px;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       transition: all 0.2s;
     }
 
@@ -100,7 +101,7 @@
       display: block;
     }
 
-    /* SLOTS */
+    /* COMMON COMPONENTS */
     .slot-machine {
       background: #08090d;
       border: 2px solid #222738;
@@ -123,66 +124,6 @@
       font-size: 2.8rem;
     }
 
-    /* CRASH */
-    .crash-display {
-      height: 180px;
-      background: #08090d;
-      border: 2px solid #222738;
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      margin-bottom: 16px;
-      overflow: hidden;
-    }
-
-    .crash-mult {
-      font-size: 3.5rem;
-      font-weight: 900;
-      color: var(--accent);
-      text-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
-    }
-
-    .crash-status {
-      font-size: 0.9rem;
-      color: var(--subtext);
-      margin-top: 6px;
-    }
-
-    /* MINES */
-    .mines-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .mine-tile {
-      aspect-ratio: 1;
-      background: #11131c;
-      border: 1px solid #2a3045;
-      border-radius: 8px;
-      font-size: 1.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .mine-tile:hover {
-      border-color: var(--accent);
-      background: #1a1e2d;
-    }
-
-    .mine-tile.revealed {
-      background: #08090d;
-      cursor: default;
-    }
-
-    /* CONTROLS & LOG */
     .bet-control {
       display: flex;
       gap: 10px;
@@ -240,19 +181,90 @@
       color: #fff;
     }
 
+    /* CRASH */
+    .crash-display {
+      height: 160px;
+      background: #08090d;
+      border: 2px solid #222738;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .crash-mult { font-size: 3rem; font-weight: 900; color: var(--accent); }
+    .crash-status { font-size: 0.85rem; color: var(--subtext); margin-top: 6px; }
+
+    /* MINES */
+    .mines-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .mine-tile {
+      aspect-ratio: 1;
+      background: #11131c;
+      border: 1px solid #2a3045;
+      border-radius: 6px;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    .mine-tile.revealed { background: #08090d; cursor: default; }
+
+    /* ROULETTE */
+    .roulette-display {
+      background: #08090d;
+      border: 2px solid #222738;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+      color: var(--gold);
+    }
+
+    /* MULTIPLAYER / WEBRTC */
+    .p2p-box {
+      background: #08090d;
+      border: 1px solid #222738;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+    }
+    .p2p-box textarea {
+      width: 100%;
+      height: 60px;
+      background: #12141f;
+      border: 1px solid #2a3045;
+      color: #fff;
+      border-radius: 6px;
+      padding: 6px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      resize: none;
+      margin-top: 6px;
+    }
+
     .log {
       background: #08090d;
       border: 1px solid #222738;
       border-radius: 8px;
-      height: 90px;
-      padding: 10px;
+      height: 80px;
+      padding: 8px;
       overflow-y: auto;
       font-family: monospace;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       display: flex;
       flex-direction: column-reverse;
+      margin-top: 14px;
     }
-
     .log-win { color: var(--accent); }
     .log-loss { color: var(--red); }
     .log-info { color: var(--subtext); }
@@ -262,7 +274,7 @@
 
 <div class="casino-card">
   <div class="header">
-    <h1>🧪 NEON CASINO</h1>
+    <h1>🧪 NEON ARCADE & P2P</h1>
     <div class="balance-badge" id="balance">$1,000</div>
   </div>
 
@@ -271,9 +283,12 @@
     <button class="tab-btn" onclick="switchGame('crash')">📈 CRASH</button>
     <button class="tab-btn" onclick="switchGame('mines')">💣 MINES</button>
     <button class="tab-btn" onclick="switchGame('flip')">🪙 FLIP</button>
+    <button class="tab-btn" onclick="switchGame('plinko')">🔻 PLINKO</button>
+    <button class="tab-btn" onclick="switchGame('roulette')">🎡 ROULETTE</button>
+    <button class="tab-btn" onclick="switchGame('p2p')" style="border-color:var(--pink); color:var(--pink);">🤝 1V1 P2P</button>
   </div>
 
-  <!-- SLOTS PANEL -->
+  <!-- SLOTS -->
   <div id="game-slots" class="game-panel active">
     <div class="slot-machine">
       <div class="reel" id="r1">🍒</div>
@@ -286,11 +301,11 @@
     </div>
   </div>
 
-  <!-- CRASH PANEL -->
+  <!-- CRASH -->
   <div id="game-crash" class="game-panel">
     <div class="crash-display">
       <div class="crash-mult" id="crash-mult">1.00x</div>
-      <div class="crash-status" id="crash-status">Set bet & start launch</div>
+      <div class="crash-status" id="crash-status">Ready to launch</div>
     </div>
     <div class="bet-control">
       <input type="number" id="crash-bet" class="bet-input" value="50" min="10" step="10" />
@@ -298,19 +313,19 @@
     </div>
   </div>
 
-  <!-- MINES PANEL -->
+  <!-- MINES -->
   <div id="game-mines" class="game-panel">
     <div class="mines-grid" id="mines-grid"></div>
     <div class="bet-control">
       <input type="number" id="mines-bet" class="bet-input" value="50" min="10" step="10" />
-      <button class="btn btn-action" id="mines-btn" onclick="startMines()">START GAME ($50)</button>
+      <button class="btn btn-action" id="mines-btn" onclick="startMines()">START MINES ($50)</button>
     </div>
   </div>
 
-  <!-- FLIP PANEL -->
+  <!-- FLIP -->
   <div id="game-flip" class="game-panel">
-    <div class="slot-machine" style="justify-content: center; gap: 20px;">
-      <div class="reel" id="flip-coin" style="width: 120px; height: 120px; font-size: 4rem;">🪙</div>
+    <div class="slot-machine" style="justify-content: center;">
+      <div class="reel" id="flip-coin" style="width: 100px; height: 100px; font-size: 3.5rem;">🪙</div>
     </div>
     <div class="bet-control">
       <input type="number" id="flip-bet" class="bet-input" value="50" min="10" step="10" />
@@ -319,8 +334,52 @@
     </div>
   </div>
 
+  <!-- PLINKO -->
+  <div id="game-plinko" class="game-panel">
+    <div class="crash-display" style="height: 120px;">
+      <div style="font-size: 1.1rem; color: var(--subtext); margin-bottom: 8px;">PLINKO PYRAMID</div>
+      <div id="plinko-result" style="font-size: 2rem; font-weight: bold; color: var(--accent);">Drop a Slime Ball!</div>
+    </div>
+    <div class="bet-control">
+      <input type="number" id="plinko-bet" class="bet-input" value="50" min="10" step="10" />
+      <button class="btn btn-action" onclick="playPlinko()">DROP BALL</button>
+    </div>
+  </div>
+
+  <!-- ROULETTE -->
+  <div id="game-roulette" class="game-panel">
+    <div class="roulette-display" id="roulette-screen">GREEN (0) - 35x</div>
+    <div class="bet-control">
+      <input type="number" id="roul-bet" class="bet-input" value="50" min="10" step="10" />
+    </div>
+    <div class="bet-control">
+      <button class="btn" style="flex:1; border-color:var(--red); color:var(--red);" onclick="playRoulette('RED')">RED (2x)</button>
+      <button class="btn" style="flex:1; border-color:#fff; color:#fff;" onclick="playRoulette('BLACK')">BLACK (2x)</button>
+      <button class="btn" style="flex:1; border-color:var(--accent); color:var(--accent);" onclick="playRoulette('GREEN')">GREEN (35x)</button>
+    </div>
+  </div>
+
+  <!-- MULTIPLAYER P2P -->
+  <div id="game-p2p" class="game-panel">
+    <div style="font-size:0.85rem; color:var(--subtext); margin-bottom:8px;">Head-to-Head Coin Flip 1v1 Battle</div>
+    <div class="p2p-box">
+      <b>Step 1: Host / Join Connection</b>
+      <div style="display:flex; gap:6px; margin-top:6px;">
+        <button class="btn" style="flex:1; font-size:0.75rem;" onclick="p2pHost()">1. Generate Host Token</button>
+        <button class="btn" style="flex:1; font-size:0.75rem;" onclick="p2pJoin()">3. Connect via Peer Token</button>
+      </div>
+      <textarea id="p2p-output" placeholder="Your offer token will appear here to send to friend..." readonly></textarea>
+      <textarea id="p2p-input" placeholder="Paste friend's token here..."></textarea>
+    </div>
+    <div class="bet-control" style="margin-top:10px;">
+      <input type="number" id="p2p-wager" class="bet-input" value="50" />
+      <button class="btn btn-action" id="p2p-battle-btn" onclick="p2pBattle()" disabled>1V1 BATTLE ($50)</button>
+    </div>
+    <div id="p2p-status" style="font-size: 0.8rem; color: var(--pink); text-align: center;">Status: Disconnected</div>
+  </div>
+
   <div class="log" id="log">
-    <div class="log-entry log-info">Welcome! Choose a game and start playing.</div>
+    <div class="log-entry log-info">Welcome to Neon Casino! Pick a game or open P2P to play a friend.</div>
   </div>
 </div>
 
@@ -334,7 +393,7 @@
     const gain = audioCtx.createGain();
     osc.type = type;
     osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
     osc.connect(gain);
     gain.connect(audioCtx.destination);
@@ -363,51 +422,41 @@
   function switchGame(gameKey) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active'));
-    
     event.target.classList.add('active');
     document.getElementById(`game-${gameKey}`).classList.add('active');
   }
 
-  /* --- 1. SLOTS GAME --- */
+  /* 1. SLOTS */
   const slotSymbols = ['🍒', '🍋', '🔔', '💎', '7️⃣'];
   let isSpinning = false;
-
   function spinSlots() {
     if (isSpinning) return;
     const bet = parseInt(document.getElementById('slots-bet').value) || 50;
     if (balance < bet) return addLog("Insufficient balance!", "log-loss");
-
     updateBalance(-bet);
     isSpinning = true;
     let ticks = 0;
-
     const interval = setInterval(() => {
       document.getElementById('r1').innerText = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
       document.getElementById('r2').innerText = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
       document.getElementById('r3').innerText = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-      playSFX(300, 0.05, 'triangle');
+      playSFX(300, 0.04, 'triangle');
       ticks++;
-
       if (ticks > 10) {
         clearInterval(interval);
         isSpinning = false;
-        
-        // Boosted High Odds Logic: 60% chance to land match
         const winRoll = Math.random();
         let s1, s2, s3;
-        if (winRoll < 0.60) {
-          const sym = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-          s1 = s2 = s3 = sym;
+        if (winRoll < 0.55) {
+          s1 = s2 = s3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
         } else {
           s1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
           s2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
           s3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
         }
-
         document.getElementById('r1').innerText = s1;
         document.getElementById('r2').innerText = s2;
         document.getElementById('r3').innerText = s3;
-
         if (s1 === s2 && s2 === s3) {
           const win = bet * 4;
           updateBalance(win);
@@ -421,36 +470,25 @@
     }, 80);
   }
 
-  /* --- 2. CRASH GAME --- */
-  let crashActive = false;
-  let crashMult = 1.00;
-  let crashTimer = null;
-  let crashPoint = 0;
-  let crashBet = 0;
-
+  /* 2. CRASH */
+  let crashActive = false, crashMult = 1.00, crashTimer = null, crashPoint = 0, crashBet = 0;
   function toggleCrash() {
     const btn = document.getElementById('crash-btn');
     if (!crashActive) {
-      // Start Game
       crashBet = parseInt(document.getElementById('crash-bet').value) || 50;
       if (balance < crashBet) return addLog("Insufficient balance!", "log-loss");
-
       updateBalance(-crashBet);
       crashActive = true;
       crashMult = 1.00;
-      crashPoint = (Math.random() * 8 + 1.2).toFixed(2); // High odds crash point
-      
+      crashPoint = (Math.random() * 7 + 1.2).toFixed(2);
       btn.innerText = "CASH OUT";
       btn.classList.add('btn-danger');
       document.getElementById('crash-status').innerText = "Multiplier rising...";
-
       crashTimer = setInterval(() => {
         crashMult += 0.03;
         document.getElementById('crash-mult').innerText = `${crashMult.toFixed(2)}x`;
-        playSFX(200 + (crashMult * 50), 0.04);
-
+        playSFX(200 + (crashMult * 40), 0.04);
         if (crashMult >= crashPoint) {
-          // Crashed!
           clearInterval(crashTimer);
           crashActive = false;
           playSFX(100, 0.4, 'sawtooth');
@@ -461,7 +499,6 @@
         }
       }, 100);
     } else {
-      // Cash Out
       clearInterval(crashTimer);
       crashActive = false;
       const payout = Math.floor(crashBet * crashMult);
@@ -474,12 +511,8 @@
     }
   }
 
-  /* --- 3. MINES GAME --- */
-  let minesActive = false;
-  let mineLocations = [];
-  let minesBet = 0;
-  let gemsFound = 0;
-
+  /* 3. MINES */
+  let minesActive = false, mineLocations = [], minesBet = 0, gemsFound = 0;
   function initMinesGrid() {
     const grid = document.getElementById('mines-grid');
     grid.innerHTML = '';
@@ -491,50 +524,39 @@
       grid.appendChild(tile);
     }
   }
-
   function startMines() {
     minesBet = parseInt(document.getElementById('mines-bet').value) || 50;
     if (balance < minesBet) return addLog("Insufficient balance!", "log-loss");
-
     updateBalance(-minesBet);
     minesActive = true;
     gemsFound = 0;
     mineLocations = [];
-
-    // Place 3 mines
     while (mineLocations.length < 3) {
       let rand = Math.floor(Math.random() * 25);
       if (!mineLocations.includes(rand)) mineLocations.push(rand);
     }
-
     initMinesGrid();
-    const btn = document.getElementById('mines-btn');
-    btn.innerText = "CASH OUT ($0)";
-    btn.onclick = cashOutMines;
-    addLog(`💣 Mines active! Click tiles to find gems.`, 'log-info');
+    document.getElementById('mines-btn').innerText = "CASH OUT ($0)";
+    document.getElementById('mines-btn').onclick = cashOutMines;
+    addLog(`💣 Mines active! Click tiles.`, 'log-info');
   }
-
   function revealMine(index, tile) {
     if (!minesActive || tile.classList.contains('revealed')) return;
-
     tile.classList.add('revealed');
     if (mineLocations.includes(index)) {
-      // Hit Mine
       tile.innerText = '💥';
       playSFX(120, 0.4, 'sawtooth');
       minesActive = false;
       addLog(`💣 BOOM! Hit a mine. Lost $${minesBet}.`, 'log-loss');
       resetMinesBtn();
     } else {
-      // Hit Gem
       tile.innerText = '💎';
       gemsFound++;
-      playSFX(400 + (gemsFound * 60), 0.1);
+      playSFX(400 + (gemsFound * 50), 0.1);
       const currentWin = Math.floor(minesBet * (1 + gemsFound * 0.4));
       document.getElementById('mines-btn').innerText = `CASH OUT ($${currentWin})`;
     }
   }
-
   function cashOutMines() {
     if (!minesActive || gemsFound === 0) return;
     const currentWin = Math.floor(minesBet * (1 + gemsFound * 0.4));
@@ -544,32 +566,27 @@
     minesActive = false;
     resetMinesBtn();
   }
-
   function resetMinesBtn() {
     const btn = document.getElementById('mines-btn');
-    btn.innerText = "START GAME";
+    btn.innerText = "START MINES";
     btn.onclick = startMines;
   }
 
-  /* --- 4. COIN FLIP GAME --- */
+  /* 4. COIN FLIP */
   function playFlip(choice) {
     const bet = parseInt(document.getElementById('flip-bet').value) || 50;
     if (balance < bet) return addLog("Insufficient balance!", "log-loss");
-
     updateBalance(-bet);
     const coinEl = document.getElementById('flip-coin');
     let rolls = 0;
-
     const interval = setInterval(() => {
       coinEl.innerText = rolls % 2 === 0 ? '🪙' : '👑';
-      playSFX(400, 0.04);
+      playSFX(400, 0.03);
       rolls++;
-
       if (rolls > 8) {
         clearInterval(interval);
         const result = Math.random() < 0.55 ? choice : (choice === 'HEADS' ? 'TAILS' : 'HEADS');
         coinEl.innerText = result === 'HEADS' ? '🪙' : '👑';
-
         if (result === choice) {
           const win = bet * 2;
           updateBalance(win);
@@ -583,8 +600,144 @@
     }, 70);
   }
 
-  // Initialize
-  initMinesGrid();
+  /* 5. PLINKO */
+  function playPlinko() {
+    const bet = parseInt(document.getElementById('plinko-bet').value) || 50;
+    if (balance < bet) return addLog("Insufficient balance!", "log-loss");
+    updateBalance(-bet);
+    const mults = [0.2, 0.5, 1.2, 2.5, 5.0, 10.0];
+    const pickedMult = mults[Math.floor(Math.random() * mults.length)];
+    const payout = Math.floor(bet * pickedMult);
+    updateBalance(payout);
+    playSFX(pickedMult >= 2 ? 700 : 300, 0.2);
+    document.getElementById('plinko-result').innerText = `${pickedMult}x ($${payout})`;
+    addLog(`🔻 Plinko landed on ${pickedMult}x! Payout: $${payout}`, pickedMult >= 1 ? 'log-win' : 'log-loss');
+  }
+
+  /* 6. ROULETTE */
+  function playRoulette(choice) {
+    const bet = parseInt(document.getElementById('roul-bet').value) || 50;
+    if (balance < bet) return addLog("Insufficient balance!", "log-loss");
+    updateBalance(-bet);
+    const outcomes = ['RED', 'RED', 'BLACK', 'BLACK', 'GREEN'];
+    const result = outcomes[Math.floor(Math.random() * outcomes.length)];
+    document.getElementById('roulette-screen').innerText = `Landed: ${result}`;
+    if (result === choice) {
+      const multiplier = result === 'GREEN' ? 35 : 2;
+      const payout = bet * multiplier;
+      updateBalance(payout);
+      playSFX(750, 0.3);
+      addLog(`🎡 ROULETTE WIN! ${result} hit - Won $${payout}!`, 'log-win');
+    } else {
+      playSFX(150, 0.2, 'sawtooth');
+      addLog(`🎡 Roulette landed on ${result}. Lost $${bet}.`, 'log-loss');
+    }
+  }
+
+  /* 7. WEBRTC P2P 1V1 */
+  let pc = null, dataChannel = null;
+  const rtcConfig = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+
+  function initPC() {
+    if (pc) pc.close();
+    pc = new RTCPeerConnection(rtcConfig);
+  }
+
+  async function p2pHost() {
+    initPC();
+    dataChannel = pc.createDataChannel("casino1v1");
+    setupDataChannel();
+
+    pc.onicecandidate = e => {
+      if (!e.candidate) {
+        document.getElementById('p2p-output').value = btoa(JSON.stringify(pc.localDescription));
+      }
+    };
+
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    document.getElementById('p2p-status').innerText = "Status: Offer generated. Send token to friend.";
+  }
+
+  async function p2pJoin() {
+    initPC();
+    pc.ondatachannel = e => {
+      dataChannel = e.channel;
+      setupDataChannel();
+    };
+
+    const token = document.getElementById('p2p-input').value.trim();
+    if (!token) return alert("Paste host token first!");
+
+    const offer = JSON.parse(atob(token));
+    await pc.setRemoteDescription(offer);
+
+    pc.onicecandidate = e => {
+      if (!e.candidate) {
+        document.getElementById('p2p-output').value = btoa(JSON.stringify(pc.localDescription));
+      }
+    };
+
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+    document.getElementById('p2p-status').innerText = "Status: Answer generated. Send token back to host.";
+  }
+
+  // If host receives answer string
+  document.getElementById('p2p-input').onchange = async () => {
+    if (pc && !pc.remoteDescription && document.getElementById('p2p-input').value.length > 50) {
+      try {
+        const answer = JSON.parse(atob(document.getElementById('p2p-input').value.trim()));
+        await pc.setRemoteDescription(answer);
+      } catch(e) {}
+    }
+  };
+
+  function setupDataChannel() {
+    dataChannel.onopen = () => {
+      document.getElementById('p2p-status').innerText = "Status: Connected to Peer!";
+      document.getElementById('p2p-battle-btn').disabled = false;
+      addLog("🤝 P2P DataChannel established successfully!", "log-win");
+    };
+    dataChannel.onclose = () => {
+      document.getElementById('p2p-status').innerText = "Status: Disconnected";
+      document.getElementById('p2p-battle-btn').disabled = true;
+    };
+    dataChannel.onmessage = e => {
+      const msg = JSON.parse(e.data);
+      handleP2PMessage(msg);
+    };
+  }
+
+  function p2pBattle() {
+    const wager = parseInt(document.getElementById('p2p-wager').value) || 50;
+    if (balance < wager) return addLog("Insufficient balance for battle!", "log-loss");
+    updateBalance(-wager);
+
+    const myRoll = Math.random();
+    dataChannel.send(JSON.stringify({ type: 'roll', roll: myRoll, wager: wager }));
+    addLog(`⚔️ 1v1 Battle initiated with wager $${wager}! Waiting for opponent roll...`, 'log-info');
+    document.getElementById('p2p-battle-btn').disabled = true;
+  }
+
+  function handleP2PMessage(msg) {
+    if (msg.type === 'roll') {
+      const myRoll = Math.random();
+      const wager = msg.wager;
+      document.getElementById('p2p-battle-btn').disabled = false;
+
+      addLog(`Opponent rolled: ${msg.roll.toFixed(3)} | Your roll: ${myRoll.toFixed(3)}`, 'log-info');
+      if (myRoll > msg.roll) {
+        const totalWin = wager * 2;
+        updateBalance(totalWin);
+        playSFX(800, 0.4);
+        addLog(`🏆 1v1 VICTORY! Won $${totalWin}!`, 'log-win');
+      } else {
+        playSFX(120, 0.3, 'sawtooth');
+        addLog(`💀 1v1 DEFEAT! Lost $${wager}.`, 'log-loss');
+      }
+    }
+  }
 </script>
 
 </body>
