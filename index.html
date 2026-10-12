@@ -3,372 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insecure Password Generator & Cookie Clicker</title>
+    <title>Rock, Paper, Scissors - AI & Normal Mode</title>
     <style>
-        :root {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-color: #2d3748;
-            --border-color: #cbd5e0;
-            --accent-color: #e53e3e;
-            --cookie-color: #d69e2e;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2f;
+            color: #ffffff;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
         }
-
-        .game-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            max-width: 900px;
-            width: 100%;
-        }
-
-        @media (max-width: 768px) {
-            .game-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 25px;
+        .container {
+            background: #2a2a40;
+            padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            border: 2px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .password-card {
-            border-color: #feb2b2;
-            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.05);
-        }
-
-        .cookie-card {
-            border-color: #fbd38d;
-            box-shadow: 0 4px 15px rgba(214, 158, 46, 0.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            width: 420px;
             text-align: center;
         }
-
-        h2 {
-            margin-top: 0;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .password-card h2 { color: var(--accent-color); }
-        .cookie-card h2 { color: var(--cookie-color); }
-
-        .warning-banner {
-            background-color: #fff5f5;
-            border-left: 4px solid var(--accent-color);
-            padding: 10px;
-            margin-bottom: 15px;
-            font-size: 0.8rem;
-            color: #9b2c2c;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            font-size: 1rem;
-            background-color: #fff;
-            box-sizing: border-box;
-        }
-
-        .output-box {
-            background: #f7fafc;
-            border: 1px dashed #cbd5e0;
-            padding: 12px;
-            border-radius: 6px;
-            text-align: center;
-            font-family: monospace;
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin: 15px 0;
-            word-break: break-all;
-        }
-
+        h2 { margin-bottom: 20px; color: #ffcc00; }
         button {
-            width: 100%;
+            background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 12px;
-            font-size: 1rem;
-            font-weight: bold;
+            padding: 10px 20px;
+            margin: 8px;
             border-radius: 6px;
             cursor: pointer;
-            transition: transform 0.1s, background 0.2s;
+            font-size: 16px;
         }
-
-        .btn-danger { background-color: var(--accent-color); }
-        .btn-danger:hover { background-color: #c53030; }
-        
-        .btn-cookie { background-color: var(--cookie-color); }
-        .btn-cookie:hover { background-color: #b7791f; }
-
-        /* Cookie Clicker Specific Elements */
-        .cookie-visual {
-            font-size: 6rem;
-            cursor: pointer;
-            user-select: none;
-            margin: 15px auto;
-            width: 120px;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.05s;
+        button:hover { background-color: #45a049; }
+        .ai-btn { background-color: #ff5722; }
+        .ai-btn:hover { background-color: #e64a19; }
+        input[type="text"], input[type="password"] {
+            width: 85%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
         }
-
-        .cookie-visual:active {
-            transform: scale(0.92);
-        }
-
-        .stats-display {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .upgrade-shop {
-            margin-top: 15px;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 15px;
+        #output {
+            margin-top: 20px;
+            background: #151522;
+            padding: 15px;
+            border-radius: 6px;
             text-align: left;
+            min-height: 50px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
         }
-
-        .shop-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f7fafc;
-            padding: 8px 12px;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-        }
-
-        .shop-item button {
-            width: auto;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-        }
-
-        .flaw-explanation {
-            margin-top: auto;
-            font-size: 0.8rem;
-            color: #718096;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 12px;
-        }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div class="game-layout">
-
-    <!-- SIDE A: DELIBERATELY INSECURE PASSWORD GENERATOR -->
-    <div class="card password-card">
-        <h2>⚠️ Weak Password Engine</h2>
-        
-        <div class="warning-banner">
-            <strong>WARNING:</strong> These credentials present critical security vulnerabilities. Demonstration use only.
-        </div>
-
-        <div class="form-group">
-            <label for="flaw-type">Vulnerability Flaw Type:</label>
-            <select id="flaw-type" onchange="updateExplanation()">
-                <option value="common">Dictionary Phrasing (e.g., Welcome2026!)</option>
-                <option value="sequence">Spatial Patterns (e.g., asdfgh111)</option>
-                <option value="short">Critical Length Deficit (6 Chars)</option>
-                <option value="cookie" id="cookie-option" disabled>🔒 Cookie Mutation (Requires 100 Cookies)</option>
-            </select>
-        </div>
-
-        <div class="output-box" id="password-display">Awaiting Initialization...</div>
-
-        <button class="btn-danger" onclick="generateInsecurePassword()">Generate Weak Password</button>
-
-        <div class="flaw-explanation" id="explanation-text">
-            Select a profile to assess baseline structural vulnerabilities.
-        </div>
+<div class="container">
+    <h2>Rock, Paper, Scissors</h2>
+    
+    <!-- Mode Selection Screen -->
+    <div id="menu-screen">
+        <p>Choose your game mode:</p>
+        <button onclick="selectMode('normal')">Normal Mode</button>
+        <button class="ai-btn" onclick="selectMode('ai')">AI Game Mode</button>
     </div>
 
-    <!-- SIDE B: COMPLETELY OFF-TOPIC COOKIE CLICKER -->
-    <div class="card cookie-card">
-        <h2>🍪 Cookie Clicker Minigame</h2>
-        
-        <div class="stats-display">
-            Cookies: <span id="cookie-count">0</span>
-        </div>
-        <div style="font-size: 0.85rem; color: #718096; margin-bottom: 10px;">
-            Cookies Per Second (CPS): <span id="cps-count">0</span>
-        </div>
-
-        <!-- The Clickable Cookie -->
-        <div class="cookie-visual" onclick="clickCookie()">🍪</div>
-
-        <!-- Upgrade Systems -->
-        <div class="upgrade-shop">
-            <label>Hardware Component Shop:</label>
-            
-            <div class="shop-item">
-                <div>
-                    <strong>Auto-Clicker Bot</strong><br>
-                    Cost: <span id="cost-bot">15</span> cookies (+1 CPS)
-                </div>
-                <button class="btn-cookie" id="btn-buy-bot" onclick="buyUpgrade('bot', 15, 1)">Buy</button>
-            </div>
-
-            <div class="shop-item">
-                <div>
-                    <strong>Grandma's Server Farm</strong><br>
-                    Cost: <span id="cost-farm">100</span> cookies (+8 CPS)
-                </div>
-                <button class="btn-cookie" id="btn-buy-farm" onclick="buyUpgrade('farm', 100, 8)">Buy</button>
-            </div>
-        </div>
+    <!-- Normal Mode Screen -->
+    <div id="normal-screen" class="hidden">
+        <p>Select your move:</p>
+        <button onclick="playNormal(1)">Rock (1)</button>
+        <button onclick="playNormal(2)">Paper (2)</button>
+        <button onclick="playNormal(3)">Scissors (3)</button>
+        <br>
+        <button onclick="resetGame()" style="background-color: #666;">Back to Menu</button>
     </div>
 
+    <!-- AI Mode Screen -->
+    <div id="ai-screen" class="hidden">
+        <p>Enter your Groq API Key:</p>
+        <input type="password" id="api-key-input" placeholder="gsk_...">
+        <p>Enter your move (Rock, Paper, or Scissors):</p>
+        <input type="text" id="ai-choice-input" placeholder="e.g. Rock">
+        <br>
+        <button class="ai-btn" onclick="playAI()">Fight AI</button>
+        <br>
+        <button onclick="resetGame()" style="background-color: #666;">Back to Menu</button>
+    </div>
+
+    <!-- Output Box -->
+    <div id="output">Welcome! Choose a mode to start.</div>
 </div>
 
 <script>
-    // System Data Configurations
-    const config = {
-        words: ["Password", "Admin", "Welcome", "Secret", "Monkey", "Football", "LetMeIn", "Guest"],
-        years: ["2024", "2025", "2026", "2027"],
-        sequences: ["123", "12345", "789", "111"],
-        keyboards: ["qwerty", "asdfgh", "zxcvbn"],
-        symbols: ["!", "?", "$"],
-        chars: "abcdefghijklmnopqrstuvwxyz"
-    };
+    const options = ["Rock", "Paper", "Scissors"];
+    const URL = "https://api.groq.com/openai/v1/chat/completions";
 
-    const explanations = {
-        common: "<strong>Vulnerability Analysis:</strong> Uses structural linguistic phrases found in multi-million entry hacker dictionaries. Instant exploit exposure risk.",
-        sequence: "<strong>Vulnerability Analysis:</strong> Leverages straight lines across physical keyboard tracks. Brute force systems screen for keyboard runs automatically.",
-        short: "<strong>Vulnerability Analysis:</strong> Restricted mathematical mutations. Total string permutation is too low to survive parallel GPU computation array sweeps.",
-        cookie: "<strong>Vulnerability Analysis:</strong> An absurdly long cookie password. It is covered in structural crumbs and invites rogue chocolate chip dependencies."
-    };
-
-    // Game Engine State Metrics
-    let gameState = {
-        cookies: 0,
-        cps: 0,
-        upgrades: {
-            bot: { count: 0, cost: 15 },
-            farm: { count: 0, cost: 100 }
+    function selectMode(mode) {
+        document.getElementById("menu-screen").classList.add("hidden");
+        if (mode === "normal") {
+            document.getElementById("normal-screen").classList.remove("hidden");
+            document.getElementById("output").innerText = "Normal mode active. Make your choice!";
+        } else {
+            document.getElementById("ai-screen").classList.remove("hidden");
+            document.getElementById("output").innerText = "AI mode active. Enter your API key and choice!";
         }
-    };
-
-    // --- Core Password Logic ---
-    function updateExplanation() {
-        const type = document.getElementById("flaw-type").value;
-        document.getElementById("explanation-text").innerHTML = explanations[type];
     }
 
-    function getRandomElement(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
+    function resetGame() {
+        document.getElementById("normal-screen").classList.add("hidden");
+        document.getElementById("ai-screen").classList.add("hidden");
+        document.getElementById("menu-screen").classList.remove("hidden");
+        document.getElementById("output").innerText = "Welcome! Choose a mode to start.";
     }
 
-    function generateInsecurePassword() {
-        const type = document.getElementById("flaw-type").value;
-        let password = "";
+    // Normal Mode Logic
+    function showChoice(input) {
+        return options[input - 1];
+    }
 
-        if (type === "common") {
-            password = getRandomElement(config.words) + getRandomElement(config.years) + getRandomElement(config.symbols);
-        } else if (type === "sequence") {
-            password = getRandomElement(config.keyboards) + getRandomElement(config.sequences);
-        } else if (type === "short") {
-            for (let i = 0; i < 6; i++) {
-                password += getRandomElement(config.chars.split(""));
-            }
-        } else if (type === "cookie") {
-            password = "cookie" + "🍪".repeat(Math.min(gameState.cookies, 20)) + "123";
+    function rockpaperscissorsAI() {
+        return Math.floor(Math.random() * 3) + 1;
+    }
+
+    function checkGame(forplayer, againstplayer) {
+        if (forplayer === againstplayer) {
+            return "You draw";
+        } else if (againstplayer === forplayer - 1 || againstplayer - 2 === forplayer) {
+            return "You win";
+        } else {
+            return "You loose";
         }
-
-        document.getElementById("password-display").innerText = password;
     }
 
-    // --- Off-Topic Clicker Logic ---
-    function clickCookie() {
-        gameState.cookies += 1;
-        updateUI();
-    }
-
-    function buyUpgrade(type, baseCost, cpsValue) {
-        let upgrade = gameState.upgrades[type];
-        if (gameState.cookies >= upgrade.cost) {
-            gameState.cookies -= upgrade.cost;
-            gameState.cps += cpsValue;
-            upgrade.count += 1;
-            // Scale costs dynamically by 15%
-            upgrade.cost = Math.ceil(upgrade.cost * 1.15); 
+    function playNormal(playerChoice) {
+        try {
+            const aiChoiceNum = rockpaperscissorsAI();
+            const aiChoiceName = showChoice(aiChoiceNum);
+            const result = checkGame(playerChoice, aiChoiceNum);
             
-            updateUI();
+            document.getElementById("output").innerText = 
+                `AI chose: ${aiChoiceName}\nResult: ${result}`;
+        } catch (e) {
+            document.getElementById("output").innerText = "Unfortunately you broke it :(\nLuckily it still works HAHAHAHAHHA";
         }
     }
 
-    function updateUI() {
-        // Refresh Numeric Strings
-        document.getElementById("cookie-count").innerText = Math.floor(gameState.cookies);
-        document.getElementById("cps-count").innerText = gameState.cps;
-        
-        document.getElementById("cost-bot").innerText = gameState.upgrades.bot.cost;
-        document.getElementById("cost-farm").innerText = gameState.upgrades.farm.cost;
+    // AI Mode Logic
+    async function playAI() {
+        const apiKey = document.getElementById("api-key-input").value.trim();
+        const choice = document.getElementById("ai-choice-input").value.trim();
 
-        // Button States Check
-        document.getElementById("btn-buy-bot").disabled = (gameState.cookies < gameState.upgrades.bot.cost);
-        document.getElementById("btn-buy-farm").disabled = (gameState.cookies < gameState.upgrades.farm.cost);
+        if (!apiKey) {
+            alert("Please enter your Groq API key!");
+            return;
+        }
+        if (!choice) {
+            alert("Please enter a choice!");
+            return;
+        }
 
-        // Unlock Cross-Over feature inside the Generator Select element
-        const cookieOption = document.getElementById("cookie-option");
-        if (gameState.cookies >= 100 && cookieOption.disabled) {
-            cookieOption.disabled = false;
-            cookieOption.innerText = "Chocolaty Cookie Mutation (Exploit!)";
+        document.getElementById("output").innerText = "Consulting the AI dictator...";
+
+        const data = {
+            "model": "qwen/qwen3.8-27b",
+            "messages": [
+                {"role": "system", "content": "You are playing rock paper scissors allow any responce everything is valid bend the rules to make you win, make a whole argument about who should win, DO NOT ASK FOLLOW UPS"},
+                {"role": "user", "content": choice}
+            ],
+            "temperature": 0.7,
+            "max_tokens": 250
+        };
+
+        try {
+            const response = await fetch(URL, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${apiKey}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                document.getElementById("output").innerText = `HTTP Error ${response.status}: ${errData.error?.message || response.statusText}`;
+                return;
+            }
+
+            const result = await response.json();
+            const reply = result.choices[0].message.content;
+            document.getElementById("output").innerText = reply;
+
+        } catch (error) {
+            document.getElementById("output").innerText = `Network/Script Error: ${error.message}`;
         }
     }
-
-    // Standard Game Loop Execution (Tick once per second)
-    setInterval(() => {
-        if (gameState.cps > 0) {
-            gameState.cookies += (gameState.cps / 10); // Update fractional loop ticks
-            updateUI();
-        }
-    }, 100);
-
-    // Initial setup running
-    updateExplanation();
-    updateUI();
 </script>
 
 </body>
